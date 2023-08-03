@@ -1,3 +1,5 @@
+import "dotenv/config";
+import { MongoClient, ObjectId } from "mongodb";
 import MeetUpDetail from "@/components/meetups/MeetUpDetail";
 import { Meetup } from "@/components/meetups/MeetupItem";
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -6,10 +8,10 @@ import { ParsedUrlQuery } from "querystring";
 export default function MeetupDetails(props: { meetUpData: Meetup }) {
   return (
     <MeetUpDetail
-      image="https://images.unsplash.com/photo-1543872084-c7bd3822856f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-      title="Somewhere far away"
-      address="Street Somewehre, 5, City"
-      description="The meetup description"
+      image={props.meetUpData.image}
+      title={props.meetUpData.title}
+      address={props.meetUpData.address}
+      description={props.meetUpData.description}
     />
   );
 }
@@ -28,21 +30,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 interface IParams extends ParsedUrlQuery {
-  meetUpID: string;
+  meetupId: string;
 }
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { meetUpID } = context.params as IParams;
+  const { meetupId } = context.params as IParams;
+  console.log("Params: ", context.params);
+  console.log("meetupId", meetupId);
+  let meetup;
+  try {
+    const client = await MongoClient.connect(process.env.MONGODB_URI_WITH_PWD!);
+    const db = client.db();
+    meetup = (await db
+      .collection("meetups")
+      .findOne({ _id: ObjectId(meetupId) })) as unknown as Meetup;
+    console.log("Hola: ", meetup);
+    client.close();
+  } catch (e) {
+    console.log(e);
+  }
 
   return {
     props: {
-      meetUpData: {
-        id: "m1",
-        image:
-          "https://images.unsplash.com/photo-1543872084-c7bd3822856f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-        title: "Somewhere far away",
-        address: "Street Somewehre, 5, City",
-        description: "The meetup description",
-      },
+      meetUpData: { ...meetup, _id: meetup?._id?.toString() },
     },
   };
 };

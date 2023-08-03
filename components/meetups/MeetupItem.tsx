@@ -4,7 +4,7 @@ import Card from "../ui/Card";
 import classes from "./MeetupItem.module.css";
 
 export type Meetup = {
-  id?: string;
+  _id?: string;
   image: string;
   title: string;
   address: string;
@@ -15,14 +15,14 @@ function MeetupItem(props: Meetup) {
   const router = useRouter();
 
   const showDetailsHandler = () => {
-    router.push(`/${props.id}`);
+    router.push(`/${props._id}`);
   };
 
   return (
     <li className={classes.item}>
       <Card>
         <div className="flex place-content-center">
-          <img className="mt-7 max-w-lg " src={props.image} alt={props.title} />
+          <img className="mt-7 max-w-lg" src={props.image} alt={props.title} />
         </div>
         <div className={classes.content}>
           <h3>{props.title}</h3>

@@ -6,8 +6,8 @@ function MeetupList(props: { meetups: Meetup[] }) {
     <ul className={classes.list}>
       {props.meetups.map((meetup) => (
         <MeetupItem
-          key={meetup.id}
-          id={meetup.id}
+          key={meetup._id}
+          _id={meetup._id}
           image={meetup.image}
           title={meetup.title}
           address={meetup.address}
