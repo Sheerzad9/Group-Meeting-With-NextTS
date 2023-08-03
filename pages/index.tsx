@@ -1,31 +1,11 @@
-import {
-  GetServerSideProps,
-  GetStaticProps,
-  InferGetStaticPropsType,
-} from "next";
+import "dotenv/config";
+import { MongoClient } from "mongodb";
+import { GetStaticProps } from "next";
 
 import MeetupList from "@/components/meetups/MeetupList";
 import { Meetup } from "@/components/meetups/MeetupItem";
 
-const DUMMY_MEETUPS: Meetup[] = [
-  {
-    id: "m1",
-    title: "First Meetup!",
-    image:
-      "https://images.unsplash.com/photo-1543872084-c7bd3822856f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-    address: "somewhere far away",
-  },
-  {
-    id: "m2",
-    title: "Second Meetup!",
-    image:
-      "https://images.unsplash.com/photo-1597739239353-50270a473397?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=627&q=80",
-    address: "somewhere even further away",
-  },
-];
-
 export default function HomePage(props: { meetups: Meetup[] }) {
-  console.log(props);
   return <MeetupList meetups={props.meetups} />;
 }
 
@@ -41,13 +21,41 @@ export default function HomePage(props: { meetups: Meetup[] }) {
 //   };
 // };
 
+interface MongoMeetupCollection {
+  _id: object | string;
+  title: string;
+  image: string;
+  address: string;
+  description: string;
+}
+const getAllMeetupsHelper = async () => {
+  let meetUps: MongoMeetupCollection[] = [];
+  try {
+    const client = await MongoClient.connect(process.env.MONGODB_URI_WITH_PWD!);
+    const db = client.db();
+    meetUps = (await db
+      .collection("meetups")
+      .find()
+      .toArray()) as unknown as MongoMeetupCollection[];
+    console.log("Hola: ", meetUps);
+    client.close();
+  } catch (e) {
+    console.log(e);
+  }
+  return meetUps.map((meetup) => {
+    return { ...meetup, _id: meetup._id.toString() };
+  });
+};
+
 // In getStaticProps function you can set timer for how often the function runs in server
 export const getStaticProps: GetStaticProps = async () => {
   // fetch data from API, you have to always return object, which contains 'props' key, its reserved name
-  const temp = DUMMY_MEETUPS;
+  const meetUps = await getAllMeetupsHelper();
+  console.log("GOT BACK RESULT: ", meetUps);
+
   return {
     props: {
-      meetups: temp,
+      meetups: meetUps.reverse(),
     },
     revalidate: 10, // revalidate key takes value in seconds, this configures how often this page will be build = in our case how frequently the new data from db will be fetched
   };
