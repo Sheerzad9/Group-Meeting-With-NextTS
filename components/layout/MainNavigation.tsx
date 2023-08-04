@@ -3,11 +3,15 @@ import Link from "next/link";
 
 function MainNavigation() {
   return (
-    <header className={classes.header}>
-      <div className={classes.logo}>React Meetups</div>
+    <header className={`${classes.header} bg-[#343a40]`}>
+      <div
+        className={`${classes.logo} mb-4 text-4xl font-extrabold leading-none md:text-5xl lg:text-6xl`}
+      >
+        <Link href="/">React Meetups</Link>
+      </div>
       <nav>
         <ul>
-          <li>
+          <li className="text-black">
             <Link href="/">All Meetups</Link>
           </li>
           <li>

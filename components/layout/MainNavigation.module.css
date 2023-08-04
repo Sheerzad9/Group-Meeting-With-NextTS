@@ -10,7 +10,7 @@
 
 .logo {
   font-size: 2rem;
-  color: white;
+  color: #63e6be;
   font-weight: bold;
 }
 
@@ -29,11 +29,12 @@
 .header a {
   text-decoration: none;
   font-size: 1.5rem;
-  color: #fcb8d2;
+  color: #63e6be;
 }
 
 .header a:hover,
 .header a:active,
 .header a.active {
-  color: white;
+  color: #e6fcf5;
+  transition: 1s;
 }

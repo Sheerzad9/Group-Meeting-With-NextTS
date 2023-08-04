@@ -1,4 +1,5 @@
 import "dotenv/config";
+import Head from "next/head";
 import { MongoClient } from "mongodb";
 import { GetStaticProps } from "next";
 
@@ -6,7 +7,15 @@ import MeetupList from "@/components/meetups/MeetupList";
 import { Meetup } from "@/components/meetups/MeetupItem";
 
 export default function HomePage(props: { meetups: Meetup[] }) {
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <>
+      <Head>
+        <title>Meetups</title>
+        <meta name="theme-color" content="#12b886" />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </>
+  );
 }
 
 // In getServerSideProps function runs everytime it gets a request = client visiting the page
