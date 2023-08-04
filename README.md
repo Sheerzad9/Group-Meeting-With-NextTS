@@ -12,7 +12,7 @@ Link to the active project is found here https://group-meeting-with-next-ts.verc
 ### Adding new meetup
 ![alt text](https://github.com/Sheerzad9/Group-Meeting-With-NextTS/blob/main/project-imgs/meetups-form.png)
 
-### Meeyup details page
+### Meetup details page
 ![alt text](https://github.com/Sheerzad9/Group-Meeting-With-NextTS/blob/main/project-imgs/meetups-details.png)
 
 ## For running on your local computer
