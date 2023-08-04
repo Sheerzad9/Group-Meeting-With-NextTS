@@ -19,13 +19,7 @@ export default function MeetupDetails(props: { meetUpData: Meetup }) {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     fallback: true, // If set to false, this tells next.js that all possible paths are listed in 'path' key value, so if you enter params other than found in the list -> 404 ERROR. So if you set fallback to true, next tries to create the page even tho the param is not found in the paths key value list.
-    paths: [
-      {
-        params: {
-          meetupId: "m1",
-        },
-      },
-    ],
+    paths: [],
   };
 };
 
