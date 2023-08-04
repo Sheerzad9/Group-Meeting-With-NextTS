@@ -42,7 +42,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const db = client.db();
     meetup = (await db
       .collection("meetups")
-      .findOne({ _id: ObjectId(meetupId) })) as unknown as Meetup;
+      .findOne({ _id: new ObjectId(meetupId) })) as unknown as Meetup;
     console.log("Hola: ", meetup);
     client.close();
   } catch (e) {
